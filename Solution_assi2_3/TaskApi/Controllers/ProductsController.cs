@@ -19,8 +19,16 @@ namespace TaskApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product = _products.FirstOrDefault(t => t.Id == id);
-            if(product == null)
+            Products? product = null;
+            foreach (var p in _products)
+            {
+                if (p.Id == id)
+                {
+                    product = p;
+                    break;
+                 }
+            }
+            if (product == null)
             {
                 return NotFound();
             }
@@ -32,14 +40,22 @@ namespace TaskApi.Controllers
         public IActionResult Create(Products product)
         {
             _products.Add(product);
-            return CreatedAtAction(nameof(GetById),new {id=product.Id },product);
+           return CreatedAtAction(nameof(GetById),new {id=product.Id },product);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update (int id,Products updatedproduct)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            if(product == null)
+            Products? product = null;
+            foreach (var p in _products)
+            {
+                if (p.Id == id)
+                {
+                    product = p;
+                    break;
+                }
+            }
+            if (product == null)
             {
                 return NotFound();
             }
@@ -54,11 +70,20 @@ namespace TaskApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
+            Products? product = null;
+            foreach (var p in _products)
+            {
+                if (p.Id == id)
+                {
+                    product = p;
+                    break;
+                }
+            }
             if (product == null)
             {
                 return NotFound();
             }
+            
             _products.Remove(product);
             return NoContent();
         }
@@ -72,7 +97,15 @@ namespace TaskApi.Controllers
                 return BadRequest();
             }
 
-            var products = _products.FirstOrDefault(p => p.Id == id);
+            Products? products = null;
+            foreach (var p in _products)
+            {
+                if (p.Id == id)
+                {
+                    products = p;
+                    break;
+                }
+            }
             if (products == null)
             {
                 return NotFound();
@@ -80,7 +113,5 @@ namespace TaskApi.Controllers
             products.Name = product.Name;
             return Ok(products);
         }
-
-
     }
 }
