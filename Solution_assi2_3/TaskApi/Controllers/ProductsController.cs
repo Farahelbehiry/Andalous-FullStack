@@ -19,7 +19,7 @@ namespace TaskApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            Products? product = null;
+            Products product = null;
             foreach (var p in _products)
             {
                 if (p.Id == id)
@@ -46,7 +46,7 @@ namespace TaskApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update (int id,Products updatedproduct)
         {
-            Products? product = null;
+            Products product = null;
             foreach (var p in _products)
             {
                 if (p.Id == id)
@@ -70,7 +70,7 @@ namespace TaskApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Products? product = null;
+            Products product = null;
             foreach (var p in _products)
             {
                 if (p.Id == id)
@@ -97,7 +97,7 @@ namespace TaskApi.Controllers
                 return BadRequest();
             }
 
-            Products? products = null;
+            Products products = null;
             foreach (var p in _products)
             {
                 if (p.Id == id)
