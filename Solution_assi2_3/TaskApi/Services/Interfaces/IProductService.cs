@@ -6,9 +6,9 @@ namespace TaskApi.Services.Interfaces
         public IEnumerable<Products> GetAll();
         public Products GetById(int id);
         public Products Create(Products product);
-        public bool Update(int Id, Products Updatedproduct);
-        public bool Delete(int Id);
-
+        public Products Update(int id, Products updatedproduct);
+        public bool Delete(int id);
+        public Products UpdateNameField(int id, Products product);
 
 
     }

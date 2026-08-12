@@ -13,8 +13,6 @@ namespace TaskApi.Controllers
         {
             _productservice = productuctservice;
         }
-        
-
         [HttpGet]
         public ActionResult<IEnumerable<Products>> GetAll()
         {
@@ -31,57 +29,31 @@ namespace TaskApi.Controllers
 
             return Ok(products);
         }
-
         [HttpPost]
         public IActionResult Create(Products product)
         {
-            _products.Add(product);
-           return CreatedAtAction(nameof(GetById),new {id=product.Id },product);
+            var created = _productservice.Create(product);
+            return CreatedAtAction(nameof(GetById),new {id=product.Id },product);
         }
-
         [HttpPut("{id}")]
         public IActionResult Update (int id,Products updatedproduct)
         {
-            Products product = null;
-            foreach (var p in _products)
-            {
-                if (p.Id == id)
-                {
-                    product = p;
-                    break;
-                }
-            }
-            if (product == null)
-            {
+           var updated = _productservice.Update(id,updatedproduct);
+            if (updated == null)
                 return NotFound();
-            }
-
-            product.Name = updatedproduct.Name;
-            product.Price = updatedproduct.Price;
-
-            return Ok(product);
+            
+            return Ok(updated);
 
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Products product = null;
-            foreach (var p in _products)
-            {
-                if (p.Id == id)
-                {
-                    product = p;
-                    break;
-                }
-            }
-            if (product == null)
-            {
+            var gonnadelete = _productservice.Delete(id);
+            if (gonnadelete == false)
                 return NotFound();
-            }
-            
-            _products.Remove(product);
             return NoContent();
+
         }
 
         //bonus
@@ -93,21 +65,11 @@ namespace TaskApi.Controllers
                 return BadRequest();
             }
 
-            Products products = null;
-            foreach (var p in _products)
-            {
-                if (p.Id == id)
-                {
-                    products = p;
-                    break;
-                }
-            }
-            if (products == null)
-            {
+            var gonnaupdate = _productservice.UpdateNameField(id,product);
+            if (gonnaupdate == null)
                 return NotFound();
-            }
-            products.Name = product.Name;
-            return Ok(products);
+            
+            return Ok(gonnaupdate);
         }
     }
 }
