@@ -1,9 +1,17 @@
+using TaskApi.Repositories;
+using TaskApi.Repositories.Interfaces;
+using TaskApi.Services.Interfaces;
+using TaskApi.Sevices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddSingleton<IProductService, ProductService >();
+builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
