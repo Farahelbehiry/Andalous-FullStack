@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskApi.Models;
-
+using TaskApi.Services.Interfaces;
 
 namespace TaskApi.Controllers
 {
@@ -8,32 +8,28 @@ namespace TaskApi.Controllers
     [Route("/api/[controller]")] //https://localhost:7109/api/Products
     public class ProductsController : ControllerBase
     {
-        private static readonly List<Products> _products = new();
+        private IProductService _productservice;
+        public ProductsController(IProductService productuctservice)
+        {
+            _productservice = productuctservice;
+        }
+        
 
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<IEnumerable<Products>> GetAll()
         {
-            return Ok(_products);
+            return Ok(_productservice.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            Products product = null;
-            foreach (var p in _products)
-            {
-                if (p.Id == id)
-                {
-                    product = p;
-                    break;
-                 }
-            }
-            if (product == null)
-            {
-                return NotFound();
-            }
+           
+            var products = _productservice.GetById(id);
+            if(products == null)
+            {  return NotFound(); }
 
-            return Ok(product);
+            return Ok(products);
         }
 
         [HttpPost]
