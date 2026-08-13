@@ -1,3 +1,4 @@
+using TaskApi.Middleware;
 using TaskApi.Repositories;
 using TaskApi.Repositories.Interfaces;
 using TaskApi.Services.Interfaces;
@@ -15,12 +16,13 @@ builder.Services.AddSingleton<IProductRepository, ProductRepository>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-}
+}*/
 
 app.UseHttpsRedirection();
 

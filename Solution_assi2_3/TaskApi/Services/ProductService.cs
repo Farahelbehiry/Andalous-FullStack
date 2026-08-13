@@ -1,4 +1,5 @@
-﻿using TaskApi.Models;
+﻿using TaskApi.Exceptions;
+using TaskApi.Models;
 using TaskApi.Repositories.Interfaces;
 using TaskApi.Services.Interfaces;
 
@@ -15,14 +16,31 @@ namespace TaskApi.Sevices
 
         public Products Create(Products product)
         {
+            bool nameExists = false;
+            foreach (var p in _productRepository.GetAll())
+            {
+                if (p.Name == product.Name)
+                {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            if (nameExists)
+                throw new ConflictException($"A product with the name '{product.Name}' already exists.");
+
             return _productRepository.Create(product);
         }
 
         public bool Delete(int id)
         {
-            return _productRepository.Delete(id);
+            var deleted = _productRepository.Delete(id);
+            if(!deleted)
+            {
+                throw new NotFoundException($"PRODUCT {id} not found");
+            }
+            return true;
         }
-
         public IEnumerable<Products> GetAll()
         {
             return _productRepository.GetAll();
