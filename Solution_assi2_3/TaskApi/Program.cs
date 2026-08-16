@@ -1,3 +1,5 @@
+using Asp.Versioning;
+using Microsoft.Extensions.Options;
 using TaskApi.Middleware;
 using TaskApi.Repositories;
 using TaskApi.Repositories.Interfaces;
@@ -13,10 +15,23 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IProductService, ProductService >();
 builder.Services.AddSingleton<IProductRepository, ProductRepository>();
 
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<SunsetMiddleware>();
 
 // Configure the HTTP request pipeline.
 /*if (app.Environment.IsDevelopment())

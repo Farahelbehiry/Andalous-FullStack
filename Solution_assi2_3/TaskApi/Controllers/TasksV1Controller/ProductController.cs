@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using TaskApi.Models;
 using TaskApi.Services.Interfaces;
 
-namespace TaskApi.Controllers
+namespace TaskApi.Controllers.V1
 {
     [ApiController]
-    [Route("/api/[controller]")] //https://localhost:7109/api/Products
-    public class ProductsController : ControllerBase
+    [ApiVersion("1.0",Deprecated =true)]
+    [Route("/api/v{version:apiversion}/[controller]")] //https://localhost:7109/api/Products
+    public class ProductController : ControllerBase
     {
         private IProductService _productservice;
-        public ProductsController(IProductService productuctservice)
+        public ProductController(IProductService productuctservice)
         {
             _productservice = productuctservice;
         }
